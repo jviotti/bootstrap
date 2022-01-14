@@ -6,4 +6,5 @@ set -o nounset
 UNAME="$(uname)"
 test "$UNAME" = "Linux" || \
   (echo "This script should not run for $UNAME" 1>&2 && exit 1)
+touch "$OUTPUT/OS-TEST-PASSED"
 echo "PASS $0" 1>&2

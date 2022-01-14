@@ -11,4 +11,5 @@ then
   exit 1
 fi
 
+touch "$OUTPUT/OS-TEST-PASSED"
 echo "PASS $0" 1>&2
