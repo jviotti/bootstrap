@@ -1,0 +1,20 @@
+name: Test
+
+on: [ push ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - if: runner.os == 'macos'
+      run: brew install shellcheck 
+    - if: runner.os == 'linux'
+      run: sudo apt install -y shellcheck
+
+    - run: make
