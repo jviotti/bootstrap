@@ -23,20 +23,25 @@ else
   exit 1
 fi
 
-PLATFORM_DIRECTORY="$DIRECTORY/$PLATFORM"
-echo "(bootstrap) Running scripts from $PLATFORM_DIRECTORY" 1>&2
-if [ ! -d "$PLATFORM_DIRECTORY" ]
-then
-  echo "(bootstrap) WARNING: No scripts found in $PLATFORM_DIRECTORY" 1>&2
-  exit 0
-fi
-
-for script in "$PLATFORM_DIRECTORY"/*
-do
-  "$script" && EXIT_CODE="$?" || EXIT_CODE="$?"
+run_bootstrap_script() {
+  "$1" && EXIT_CODE="$?" || EXIT_CODE="$?"
   if [ "$EXIT_CODE" != "0" ]
   then
-    echo "(bootstrap) ERROR: Script failed: $script" 1>&2
+    echo "(bootstrap) ERROR: Script failed: $1" 1>&2
     exit "$EXIT_CODE"
   fi
-done
+}
+
+run_bootstrap_directory() {
+  if [ -d "$1" ]
+  then
+    echo "(bootstrap) Running scripts from $1" 1>&2
+    for script in "$1"/*
+    do
+      run_bootstrap_script "$script"
+    done
+  fi
+}
+
+run_bootstrap_directory "$DIRECTORY/$PLATFORM"
+run_bootstrap_directory "$DIRECTORY/any"
