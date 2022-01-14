@@ -4,7 +4,7 @@
 all: lint test
 
 lint: bootstrap
-	shellcheck $^
+	shellcheck $^ test/**/*.sh
 
 test: bootstrap
 	exec ./$< $@
