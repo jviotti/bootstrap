@@ -1,0 +1,42 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+DIRECTORY="${1-$PWD/bootstrap}"
+
+UNAME="$(uname)"
+if [ "$UNAME" = "Darwin" ]
+then
+  PLATFORM="macos"
+elif [ "$UNAME" = "Linux" ]
+then
+  PLATFORM="linux"
+elif [ "$(uname -o)" = "Msys" ]
+then
+  PLATFORM="windows"
+elif [ "$(uname -o)" = "Cygwin" ]
+then
+  PLATFORM="windows"
+else
+  echo "Unknown platform: $UNAME" 1>&2
+  exit 1
+fi
+
+PLATFORM_DIRECTORY="$DIRECTORY/$PLATFORM"
+echo "(bootstrap) Running scripts from $PLATFORM_DIRECTORY" 1>&2
+if [ ! -d "$PLATFORM_DIRECTORY" ]
+then
+  echo "(bootstrap) WARNING: No scripts found in $PLATFORM_DIRECTORY" 1>&2
+  exit 0
+fi
+
+for script in "$PLATFORM_DIRECTORY"/*
+do
+  "$script" && EXIT_CODE="$?" || EXIT_CODE="$?"
+  if [ "$EXIT_CODE" != "0" ]
+  then
+    echo "(bootstrap) ERROR: Script failed: $script" 1>&2
+    exit "$EXIT_CODE"
+  fi
+done
