@@ -38,8 +38,8 @@ bootstrap/
 │   └── 0001-this-script-runs-only-on-macos.sh
 │   └── 0002-this-script-runs-second-on-macos.sh
 └── windows
-│   └── 0001-this-script-runs-only-on-windows.sh
-│   └── 0002-this-script-runs-second-on-windows.sh
+    └── 0001-this-script-runs-only-on-windows.sh
+    └── 0002-this-script-runs-second-on-windows.sh
 ```
 
 Then, execute the `bootstrap` script passing the bootstrap directory as an
